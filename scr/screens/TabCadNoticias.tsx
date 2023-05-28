@@ -5,6 +5,7 @@ import { colors } from '../components/colors';
 import { FIRESTORE_DB, FIRESTORE_STORAGE } from "../../firebaseConfig";
 import { addDoc, collection } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import Loading from '../components/Loading';
 
 function TabCadNoticias() {
     const [titulo, setTitulo] = useState('');
@@ -89,15 +90,8 @@ function TabCadNoticias() {
                 }
             </View>
 
-            <Modal visible={visivel}>
-                <View style={styles.modal}>
-                    <ActivityIndicator
-                        size='large'
-                        color={colors.amarelo}
-                        animating={true}
-                    />
-                </View>
-            </Modal>
+            <Loading visivel={visivel} />
+    
         </ScrollView>
     );
 }
@@ -168,10 +162,4 @@ const styles = StyleSheet.create({
         height: 130,
         borderRadius: 20,
     },
-    modal: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: colors.verdeEscuro,
-    }
 });

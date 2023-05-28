@@ -3,25 +3,39 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '../components/TabBarIcon';
 import TabNoticias from '../screens/TabNoticias';
 import TabCadNoticias from '../screens/TabCadNoticias';
+import { colors } from '../components/colors';
 
 const Tab = createBottomTabNavigator();
 export default () => (
   <Tab.Navigator
     screenOptions={({ route }) => ({
-      tabBarIcon: () => <TabBarIcon name={route.name}/>,
+      tabBarIcon: () => <TabBarIcon name={route.name} />,
+      headerStyle: {
+        backgroundColor: colors.branco,
+      },
+      headerTitleStyle: {
+        fontSize: 22,
+        color: colors.verdeEscuro
+      },
     })}
     tabBarOptions={{
       showLabel: false,
-    }}>
+      tabBarActiveBackgroundColor: colors.verdeEscuro,
+      tabStyle: {
+        backgroundColor: colors.branco,
+      },
+    }}
+
+  >
     <Tab.Screen
       name="TabNoticias"
       component={TabNoticias}
-      options={{ title: 'Noticias'}} 
+      options={{ title: 'NOTÍCIAS' }}
     />
     <Tab.Screen
       name="TabCadNoticias"
       component={TabCadNoticias}
-      options={{ title: 'Cadastrar Noticia' }}
+      options={{ title: 'CADASTRAR NOTÍCIAS' }}
     />
   </Tab.Navigator>
 );
