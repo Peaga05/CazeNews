@@ -10,16 +10,16 @@ export default () => (
   <Tab.Navigator
     screenOptions={({ route }) => ({
       tabBarIcon: () => <TabBarIcon name={route.name} />,
+      headerShown: false,
       headerStyle: {
         backgroundColor: colors.branco,
       },
       headerTitleStyle: {
         fontSize: 22,
-        color: colors.verdeEscuro
+        color: 'black'
       },
     })}
     tabBarOptions={{
-      showLabel: false,
       tabBarActiveBackgroundColor: colors.verdeEscuro,
       tabStyle: {
         backgroundColor: colors.branco,
