@@ -7,11 +7,12 @@ import { addDoc, collection } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import Loading from '../components/Loading';
 
-function TabCadNoticias() {
+function TabCadNoticias({ route }) {
     const [titulo, setTitulo] = useState('');
     const [descricao, setDescricao] = useState('');
     const [imagem, setImagem] = useState('');
     const [visivel, setVisivel] = useState(false);
+    const {user} = route.params;
 
     const generateDate = () => {
         const ref = new Date();
@@ -48,7 +49,7 @@ function TabCadNoticias() {
 
             await uploadBytes(referencia, blob);
             const url = await getDownloadURL(referencia);
-            const doc = addDoc(collection(FIRESTORE_DB, 'Noticias'), { titulo: titulo, descricao: descricao, data: generateDate(), imagem: imagem });
+            const doc = addDoc(collection(FIRESTORE_DB, 'Noticias'), { titulo: titulo, descricao: descricao, data: generateDate(), imagem: imagem, user: user, like: 0 });
             clearFields();
             setVisivel(false);
             alert("Notícia cadastrada!")

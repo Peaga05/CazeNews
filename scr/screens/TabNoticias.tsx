@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, SafeAreaView } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faFire, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { colors } from '../components/colors';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { FIRESTORE_DB } from '../../firebaseConfig';
 import Loading from '../components/Loading';
 
-function TabNoticias() {
+function TabNoticias({ route }) {
   const [noticias, setNoticias] = useState<any[]>([]);
   const [visivel, setVisivel] = useState(true);
+  const {user} = route.params;
 
   useEffect(() => {
     const NoticiasRef = collection(FIRESTORE_DB, 'Noticias');
@@ -28,7 +31,7 @@ function TabNoticias() {
   }, [])
 
   return (
-    <SafeAreaView  style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
         style={styles.lista}
         data={noticias}
@@ -40,6 +43,30 @@ function TabNoticias() {
               <Image style={styles.imagem} source={{ uri: item.imagem }} resizeMode="cover" />
             </View>
             <Text style={styles.descricao}>{item.descricao}</Text>
+            <View style={styles.acoes}>
+              <FontAwesomeIcon
+                icon={faFire}
+                size={20}
+                color={"white"}
+                style={styles.like}
+              />
+              <Text>{item.like}</Text>
+
+              <View style={styles.crud}>
+              <FontAwesomeIcon
+                icon={faPen}
+                size={20}
+                color={"white"}
+                style={styles.edit}
+              />
+              <FontAwesomeIcon
+                icon={faTrash}
+                size={20}
+                color={"white"}
+                style={styles.excluir}
+              />
+              </View>
+            </View>
             <View style={styles.linha} />
           </View>
         )}
@@ -97,5 +124,25 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 1,
     backgroundColor: colors.amarelo
+  },
+  acoes:{
+    flexDirection: 'row',
+    marginVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  crud:{
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    paddingVertical: 20,
+  },
+  excluir:{
+
+  },
+  edit:{
+
+  },
+  like:{
+
   }
 });

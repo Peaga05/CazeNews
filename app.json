@@ -21,10 +21,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.peaga05.AppNoticias"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "af2a9f9d-1b3a-4e88-873d-2053045f85a7"
+      }
+    },
+    "scheme": "appNoticias"
   }
 }
