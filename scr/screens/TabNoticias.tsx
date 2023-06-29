@@ -66,7 +66,7 @@ function TabNoticias({ route }) {
               <TouchableOpacity onPress={() => curtir(item)}>
                 <FontAwesomeIcon
                   icon={faThumbsUp}
-                  size={35}
+                  size={25}
                   color={colors.amarelo}
                   style={styles.like}
                 />
@@ -77,7 +77,7 @@ function TabNoticias({ route }) {
                   <TouchableOpacity>
                     <FontAwesomeIcon
                       icon={faPen}
-                      size={30}
+                      size={20}
                       color={colors.amarelo}
                       style={styles.edit}
                     />
@@ -86,7 +86,7 @@ function TabNoticias({ route }) {
                   <TouchableOpacity onPress={() => excluir(item)}>
                     <FontAwesomeIcon
                       icon={faTrash}
-                      size={30}
+                      size={20}
                       color={colors.amarelo}
                       style={styles.excluir}
                     />
