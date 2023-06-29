@@ -1,16 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, SafeAreaView, TouchableOpacity } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faFire, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsUp, faPen, faTrash, faL } from '@fortawesome/free-solid-svg-icons';
 import { colors } from '../components/colors';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, doc, onSnapshot, updateDoc, deleteDoc } from 'firebase/firestore';
 import { FIRESTORE_DB } from '../../firebaseConfig';
 import Loading from '../components/Loading';
 
 function TabNoticias({ route }) {
   const [noticias, setNoticias] = useState<any[]>([]);
   const [visivel, setVisivel] = useState(true);
-  const {user} = route.params;
+  const { user } = route.params;
+
+  const curtir = async (item: any) => {
+    item.like++;
+    const colecao = doc(FIRESTORE_DB, "Noticias", item.id);
+    await updateDoc(colecao, item);
+  }
+
+  const excluir = async (item: any) => {
+    try{
+      setVisivel(true);
+      const colecao = collection(FIRESTORE_DB, "Noticias");
+      const noticia = doc(colecao, item.id);
+      await deleteDoc(noticia);
+      alert("Notícia apagada com sucesso!");
+      setVisivel(false);
+    }catch(error){
+      alert("Falha ao exlcuir!");
+    }
+  }
 
   useEffect(() => {
     const NoticiasRef = collection(FIRESTORE_DB, 'Noticias');
@@ -44,28 +63,36 @@ function TabNoticias({ route }) {
             </View>
             <Text style={styles.descricao}>{item.descricao}</Text>
             <View style={styles.acoes}>
-              <FontAwesomeIcon
-                icon={faFire}
-                size={20}
-                color={"white"}
-                style={styles.like}
-              />
-              <Text>{item.like}</Text>
+              <TouchableOpacity onPress={() => curtir(item)}>
+                <FontAwesomeIcon
+                  icon={faThumbsUp}
+                  size={35}
+                  color={colors.amarelo}
+                  style={styles.like}
+                />
+              </TouchableOpacity>
+              <Text style={styles.qtaLike}>{item.like}</Text>
+              {item.user == user &&
+                <View style={styles.crud}>
+                  <TouchableOpacity>
+                    <FontAwesomeIcon
+                      icon={faPen}
+                      size={30}
+                      color={colors.amarelo}
+                      style={styles.edit}
+                    />
+                  </TouchableOpacity>
 
-              <View style={styles.crud}>
-              <FontAwesomeIcon
-                icon={faPen}
-                size={20}
-                color={"white"}
-                style={styles.edit}
-              />
-              <FontAwesomeIcon
-                icon={faTrash}
-                size={20}
-                color={"white"}
-                style={styles.excluir}
-              />
-              </View>
+                  <TouchableOpacity onPress={() => excluir(item)}>
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      size={30}
+                      color={colors.amarelo}
+                      style={styles.excluir}
+                    />
+                  </TouchableOpacity>
+                </View>
+              }
             </View>
             <View style={styles.linha} />
           </View>
@@ -104,8 +131,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     marginHorizontal: 40,
-    fontSize: 14,
+    fontSize: 16,
     color: colors.branco,
+    textAlign: "center",
   },
   data: {
     textAlign: 'center',
@@ -125,24 +153,29 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.amarelo
   },
-  acoes:{
+  acoes: {
     flexDirection: 'row',
     marginVertical: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  crud:{
+  crud: {
     flexDirection: 'row',
     alignSelf: 'flex-end',
-    paddingVertical: 20,
+    marginLeft: 100,
   },
-  excluir:{
-
+  excluir: {
+    marginHorizontal: 10
   },
-  edit:{
-
+  edit: {
+    marginHorizontal: 10
   },
-  like:{
-
+  like: {
+    marginHorizontal: 10
+  },
+  qtaLike: {
+    color: colors.amarelo,
+    marginHorizontal: 5,
+    fontSize: 20
   }
 });
