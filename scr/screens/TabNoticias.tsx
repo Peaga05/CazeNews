@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, SafeAreaView, TouchableOpacity } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faThumbsUp, faPen, faTrash, faL } from '@fortawesome/free-solid-svg-icons';
+import { useNavigation } from '@react-navigation/native';
 import { colors } from '../components/colors';
 import { collection, doc, onSnapshot, updateDoc, deleteDoc } from 'firebase/firestore';
 import { FIRESTORE_DB } from '../../firebaseConfig';
 import Loading from '../components/Loading';
 
 function TabNoticias({ route }) {
+  const navigation = useNavigation();
   const [noticias, setNoticias] = useState<any[]>([]);
   const [visivel, setVisivel] = useState(true);
   const { user } = route.params;
@@ -31,6 +33,10 @@ function TabNoticias({ route }) {
     }
   }
 
+  const alterar = (id: any) => {
+    navigation.navigate('Alterar', { id });
+}
+
   useEffect(() => {
     const NoticiasRef = collection(FIRESTORE_DB, 'Noticias');
     const subscriber = onSnapshot(NoticiasRef, {
@@ -48,6 +54,8 @@ function TabNoticias({ route }) {
     })
     return () => subscriber();
   }, [])
+
+  noticias.sort((a, b) => b.like - a.like);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -74,7 +82,7 @@ function TabNoticias({ route }) {
               <Text style={styles.qtaLike}>{item.like}</Text>
               {item.user == user &&
                 <View style={styles.crud}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={() => alterar(item.id)}>
                     <FontAwesomeIcon
                       icon={faPen}
                       size={20}

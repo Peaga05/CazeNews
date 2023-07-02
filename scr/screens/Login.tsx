@@ -79,9 +79,9 @@ function Login() {
         <Text style={styles.txtEntrar}>Entrar com o Google</Text>
       </TouchableOpacity>
 
-      {/* <TouchableOpacity style={styles.btnEntrar} onPress={() => AsyncStorage.removeItem("@user")}>
+      <TouchableOpacity style={styles.btnEntrar} onPress={() => AsyncStorage.removeItem("@user")}>
         <Text style={styles.txtEntrar}>Sair</Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
 
     </View>
   );

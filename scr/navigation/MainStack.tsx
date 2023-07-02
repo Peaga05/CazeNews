@@ -1,6 +1,7 @@
 import React from 'react';
 import Login from '../screens/Login';
 import MainTab from './MainTab';
+import AlterarNoticia from '../screens/AlterarNoticia';
 import { createStackNavigator } from '@react-navigation/stack';
 import {colors} from '../components/colors';
 
@@ -21,6 +22,7 @@ export default () => {
         },
       }}>
       <MainStack.Screen name="Login" component={Login} />
+      <MainStack.Screen name="Alterar" component={AlterarNoticia} />
       <MainStack.Screen
         name="MainTab"
         component={MainTab}
