@@ -33,7 +33,6 @@ function Login() {
     if (!user) {
       if (response?.type === "success") {
         await getUserInfo(response.authentication?.accessToken);
-        moveToAbout();
       }
     } else {
       setUserInfo(JSON.parse(user));
@@ -54,6 +53,7 @@ function Login() {
       const user = await response.json();
       await AsyncStorage.setItem("@user", JSON.stringify(user));
       setUserInfo(user);
+      navigation.navigate('MainTab', userInfo.email);
     } catch (error) {
       // Add your own error handler here
     }
@@ -66,22 +66,33 @@ function Login() {
   });
 
   const moveToAbout = () => {
-    navigation.navigate('MainTab',  userInfo.email);
+    if(userInfo)
+      navigation.navigate('MainTab', userInfo.email);
   };
+
+  const sair = () => {
+    AsyncStorage.removeItem("@user")
+    setUserInfo(null);
+  }
 
   return (
     <View style={styles.container}>
 
       <Image style={styles.logo} source={require('../../assets/logo.png')} />
       <Text style={styles.mainTitulo}> BEM-VINDO NERDOLA </Text>
+      {userInfo &&
+        <Text style={styles.mainText}>Você esta logado como {userInfo.name}</Text>
+      }
 
-      <TouchableOpacity style={styles.btnEntrar} onPress={() => promptAsync()}>
-        <Text style={styles.txtEntrar}>Entrar com o Google</Text>
+      <TouchableOpacity style={styles.btnEntrar} onPress={userInfo ? moveToAbout : () => promptAsync()}>
+        <Text style={styles.txtEntrar}>{userInfo ? "Entrar" : "Realizar Login"}</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.btnEntrar} onPress={() => AsyncStorage.removeItem("@user")}>
-        <Text style={styles.txtEntrar}>Sair</Text>
-      </TouchableOpacity>
+      {userInfo &&
+        <TouchableOpacity style={styles.btnEntrar} onPress={sair}>
+          <Text style={styles.txtEntrar}>Sair</Text>
+        </TouchableOpacity>
+      }
 
     </View>
   );
@@ -103,7 +114,7 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 13,
     color: colors.amarelo,
-    marginTop: 5,
+    marginTop: 10,
   },
   input: {
     width: 250,
